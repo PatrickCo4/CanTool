@@ -1,1 +1,82 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 880 600" font-family="'Courier New',monospace">
+  <rect width="880" height="600" fill="#ffffff"/>
 
+  <text x="440" y="40" text-anchor="middle" font-size="23" font-weight="bold" fill="#000">ESP32 MINI CAN ADAPTER — WIRING</text>
+  <line x1="60" y1="56" x2="820" y2="56" stroke="#000" stroke-width="2"/>
+
+  <!-- ESP32-S3-Zero -->
+  <rect x="70" y="150" width="170" height="215" fill="none" stroke="#000" stroke-width="2.5"/>
+  <text x="155" y="178" text-anchor="middle" font-size="14" font-weight="bold" fill="#000">ESP32-S3-Zero</text>
+  <line x1="70" y1="188" x2="240" y2="188" stroke="#000" stroke-width="1"/>
+  <rect x="40" y="235" width="30" height="34" fill="none" stroke="#000" stroke-width="2"/>
+  <text x="55" y="290" text-anchor="middle" font-size="11" fill="#000">USB-C</text>
+  <text x="55" y="304" text-anchor="middle" font-size="11" fill="#000">5V in</text>
+  <g font-size="12" fill="#000" text-anchor="end">
+    <text x="232" y="214">3V3</text>
+    <text x="232" y="250">GND</text>
+    <text x="232" y="286">GPIO1</text>
+    <text x="232" y="322">GPIO2</text>
+  </g>
+
+  <!-- SN65HVD230 -->
+  <rect x="380" y="150" width="180" height="215" fill="none" stroke="#000" stroke-width="2.5"/>
+  <text x="470" y="178" text-anchor="middle" font-size="14" font-weight="bold" fill="#000">SN65HVD230</text>
+  <text x="470" y="194" text-anchor="middle" font-size="10" fill="#000">CAN transceiver</text>
+  <line x1="380" y1="204" x2="560" y2="204" stroke="#000" stroke-width="1"/>
+  <g font-size="12" fill="#000" text-anchor="start">
+    <text x="388" y="234">3V3 (VCC)</text>
+    <text x="388" y="270">GND</text>
+    <text x="388" y="306">D / CTX (TX)</text>
+    <text x="388" y="342">R / CRX (RX)</text>
+  </g>
+  <g font-size="12" fill="#000" text-anchor="end">
+    <text x="552" y="240">CANH</text>
+    <text x="552" y="300">CANL</text>
+  </g>
+
+  <!-- DB9 connector -->
+  <path d="M690 205 L815 205 L805 320 L700 320 Z" fill="none" stroke="#000" stroke-width="2.5"/>
+  <text x="752" y="195" text-anchor="middle" font-size="13" font-weight="bold" fill="#000">DB9 (male)</text>
+  <g fill="#000">
+    <circle cx="708" cy="238" r="4"/><circle cx="728" cy="238" r="4"/><circle cx="748" cy="238" r="4"/><circle cx="768" cy="238" r="4"/><circle cx="788" cy="238" r="4"/>
+    <circle cx="718" cy="285" r="4"/><circle cx="738" cy="285" r="4"/><circle cx="758" cy="285" r="4"/><circle cx="778" cy="285" r="4"/>
+  </g>
+  <text x="728" y="226" text-anchor="middle" font-size="10" fill="#000">2</text>
+  <text x="748" y="226" text-anchor="middle" font-size="10" fill="#000">3</text>
+  <text x="738" y="307" text-anchor="middle" font-size="10" fill="#000">7</text>
+
+  <!-- ESP32 -> transceiver wires -->
+  <path d="M240 208 L380 228" fill="none" stroke="#d33" stroke-width="3"/>
+  <path d="M240 244 L380 264" fill="none" stroke="#000" stroke-width="3"/>
+  <path d="M240 280 L380 300" fill="none" stroke="#1a9e3a" stroke-width="3"/>
+  <path d="M240 316 L380 336" fill="none" stroke="#1a6fc4" stroke-width="3"/>
+
+  <!-- transceiver -> DB9 : CANH yellow -> pin 7, CANL green -> pin 2 -->
+  <path d="M560 234 C 622 234, 660 282, 734 285" fill="none" stroke="#e0a800" stroke-width="3.5"/>
+  <path d="M560 294 C 622 294, 660 240, 724 238" fill="none" stroke="#1a9e3a" stroke-width="3.5"/>
+
+  <!-- 120 ohm across CANH/CANL -->
+  <text x="612" y="352" text-anchor="middle" font-size="12" font-weight="bold" fill="#000">120 &#937;</text>
+  <polyline points="606,252 598,258 614,264 598,270 614,276 598,282 606,288" fill="none" stroke="#000" stroke-width="2"/>
+
+  <!-- legend -->
+  <rect x="70" y="420" width="750" height="150" fill="none" stroke="#000" stroke-width="1.5"/>
+  <text x="86" y="444" font-size="13" font-weight="bold" fill="#000">CONNECTIONS</text>
+  <g font-size="13" fill="#000">
+    <line x1="90" y1="464" x2="120" y2="464" stroke="#d33" stroke-width="3"/>
+    <text x="130" y="468">ESP32 3V3  &#8594;  SN65HVD230 VCC (3V3)</text>
+    <line x1="90" y1="488" x2="120" y2="488" stroke="#000" stroke-width="3"/>
+    <text x="130" y="492">ESP32 GND  &#8594;  SN65HVD230 GND</text>
+    <line x1="90" y1="512" x2="120" y2="512" stroke="#1a9e3a" stroke-width="3"/>
+    <text x="130" y="516">ESP32 GPIO1  &#8594;  SN65HVD230 D / CTX  (CAN TX)</text>
+    <line x1="90" y1="536" x2="120" y2="536" stroke="#1a6fc4" stroke-width="3"/>
+    <text x="130" y="540">ESP32 GPIO2  &#8594;  SN65HVD230 R / CRX  (CAN RX)</text>
+
+    <line x1="470" y1="488" x2="500" y2="488" stroke="#e0a800" stroke-width="4"/>
+    <text x="510" y="492">CANH  &#8594;  DB9 pin 7   (yellow)</text>
+    <line x1="470" y1="512" x2="500" y2="512" stroke="#1a9e3a" stroke-width="4"/>
+    <text x="510" y="516">CANL  &#8594;  DB9 pin 2   (green)</text>
+    <text x="470" y="540" font-size="12" fill="#000">DB9 pin 3 = CAN_GND (optional)</text>
+  </g>
+  <text x="86" y="560" font-size="11" fill="#000">120 &#937; termination at BOTH ends of the bus &#8212; many SN65HVD230 boards include one.</text>
+</svg>
