@@ -49,7 +49,7 @@ Logic pins are set at the top of `CanTool/CanTool.ino` (`CAN_TX` / `CAN_RX`).
 | `CANL` | → | **pin 2** | green |
 | `GND` | → | pin 3 (CAN_GND) | optional |
 
-A CAN bus needs **120 Ω termination at both ends**. Many SN65HVD230 boards include one; the far node provides the other.
+A CAN bus needs **120 Ω termination at both ends**. Many SN65HVD230 boards include one; The linked transiever has the resistor built in.
 
 ## Build & flash
 
