@@ -28,7 +28,7 @@ Designed for use with:
 - SN65HVD230 CAN transceiver — https://a.co/d/02VE1raJ
 - A standard **DB9** CAN connector (male)
 - USB-C cable for power + flashing
-- 120 Ω termination resistor, if not already on your transceiver board or bus
+- 120 Ω termination resistor, if not already on your transceiver board or bus, inluded in linked board.
 
 > Use a **3.3 V** transceiver (SN65HVD230). A 5 V part would push 5 V into the ESP32's RX pin.
 
