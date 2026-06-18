@@ -1,0 +1,139 @@
+<!doctype html><html lang=en><head><meta charset=utf-8>
+<meta name=viewport content="width=device-width,initial-scale=1"><title>CAN Tool</title>
+<style>
+:root{
+ --bg:#eef1f5;--card:#fff;--ink:#16202e;--muted:#69757f;--line:#dce2ea;
+ --accent:#2563eb;--accent-d:#1d4ed8;--ok:#15a34a;--err:#dc2626;--ext:#2563eb;--std:#64748b;
+ --mono:ui-monospace,SFMono-Regular,Menlo,Consolas,monospace;
+ --sans:-apple-system,BlinkMacSystemFont,"Segoe UI",Roboto,Helvetica,Arial,sans-serif;
+}
+*{box-sizing:border-box}
+body{margin:0;background:var(--bg);color:var(--ink);font-family:var(--sans);font-size:15px;line-height:1.45}
+header{background:#0f172a;color:#fff;padding:14px 18px;display:flex;align-items:center;justify-content:space-between;flex-wrap:wrap;gap:10px}
+.brand{display:flex;align-items:center;gap:11px}
+.dot{width:9px;height:9px;border-radius:50%;background:#22c55e;box-shadow:0 0 0 3px rgba(34,197,94,.25)}
+.brand h1{font-size:17px;margin:0;font-weight:600;letter-spacing:.3px}
+.brand .sub{font-size:12px;color:#94a3b8;margin-top:1px}
+.stat{font-family:var(--mono);font-size:12px;color:#cbd5e1;background:#1e293b;padding:6px 11px;border-radius:6px}
+.wrap{max-width:760px;margin:18px auto;padding:0 16px;display:flex;flex-direction:column;gap:16px}
+.card{background:var(--card);border:1px solid var(--line);border-radius:10px;box-shadow:0 1px 2px rgba(16,32,48,.04);overflow:hidden}
+.card>h2{font-size:13px;text-transform:uppercase;letter-spacing:.8px;color:var(--muted);margin:0;padding:13px 16px;border-bottom:1px solid var(--line);font-weight:600}
+.body{padding:16px}
+.field{margin-bottom:14px}
+.lab{display:block;font-size:12px;font-weight:600;color:var(--muted);margin-bottom:5px;text-transform:uppercase;letter-spacing:.5px}
+input[type=text],select{width:100%;font-family:var(--mono);font-size:15px;color:var(--ink);border:1px solid var(--line);border-radius:7px;padding:9px 11px;background:#fff;outline:none}
+input[type=text]{text-transform:uppercase}
+input[type=text]:focus,select:focus{border-color:var(--accent);box-shadow:0 0 0 3px rgba(37,99,235,.12)}
+.rowflex{display:flex;gap:12px;flex-wrap:wrap}
+.rowflex>.field{flex:1;min-width:150px;margin-bottom:0}
+.seg{display:inline-flex;border:1px solid var(--line);border-radius:7px;overflow:hidden}
+.seg input{position:absolute;opacity:0;pointer-events:none}
+.seg label{font-size:13px;font-weight:600;padding:9px 15px;cursor:pointer;color:var(--muted);background:#fff;user-select:none}
+.seg label:last-of-type{border-left:1px solid var(--line)}
+.seg input:checked+label{background:var(--accent);color:#fff}
+.btn{font-family:var(--sans);font-size:14px;font-weight:600;border:none;border-radius:7px;padding:10px 18px;cursor:pointer}
+.btn-primary{background:var(--accent);color:#fff}
+.btn-primary:hover{background:var(--accent-d)}
+.btn-ghost{background:#fff;color:var(--muted);border:1px solid var(--line)}
+.btn-ghost:hover{border-color:var(--accent);color:var(--accent)}
+.sendrow{display:flex;align-items:center;gap:13px;margin-top:4px}
+#msg{font-family:var(--mono);font-size:13px}
+.ok{color:var(--ok)}.err{color:var(--err)}
+.montop{display:flex;align-items:center;justify-content:space-between;gap:10px;padding:11px 16px;border-bottom:1px solid var(--line)}
+.montop .t{font-size:13px;text-transform:uppercase;letter-spacing:.8px;color:var(--muted);font-weight:600}
+table{border-collapse:collapse;width:100%}
+thead th{background:#f3f6fa;text-align:left;font-size:11px;letter-spacing:.6px;text-transform:uppercase;color:var(--muted);padding:9px 14px;border-bottom:1px solid var(--line)}
+tbody td{padding:8px 14px;border-bottom:1px solid #eef2f6;font-family:var(--mono);font-size:13.5px}
+tbody tr:nth-child(even){background:#fafbfd}
+td.idc{font-weight:700;color:var(--accent)}
+td.cnt{text-align:right;color:var(--muted)}
+.badge{display:inline-block;font-family:var(--sans);font-size:11px;font-weight:600;padding:2px 8px;border-radius:5px;color:#fff}
+.badge.ext{background:var(--ext)}.badge.std{background:var(--std)}
+.empty{padding:16px 14px;color:var(--muted);font-family:var(--sans);font-size:14px}
+footer{max-width:760px;margin:6px auto 26px;padding:0 16px;color:var(--muted);font-size:12px}
+</style></head><body>
+<header>
+  <div class=brand><span class=dot></span><div><h1>CAN Tool</h1><div class=sub>Self-hosted CAN bus adapter</div></div></div>
+  <div class=stat id=stat>connecting&hellip;</div>
+</header>
+
+<div class=wrap>
+  <div class=card>
+    <h2>Send Frame</h2>
+    <div class=body>
+      <div class=rowflex>
+        <div class=field>
+          <span class=lab>Bus Rate</span>
+          <select id=baud onchange="setBaud()">
+            <option value=125>125 kbit</option>
+            <option value=250 selected>250 kbit</option>
+            <option value=500>500 kbit</option>
+            <option value=1000>1 Mbit</option>
+          </select>
+        </div>
+        <div class=field>
+          <span class=lab>Frame Type</span>
+          <div class=seg>
+            <input type=radio name=ft id=ftstd value=std><label for=ftstd>Standard</label>
+            <input type=radio name=ft id=ftext value=ext checked><label for=ftext>Extended</label>
+          </div>
+        </div>
+      </div>
+      <div class=rowflex>
+        <div class=field>
+          <span class=lab>CAN ID (hex)</span>
+          <input id=id type=text placeholder="18FF20F9">
+        </div>
+        <div class=field>
+          <span class=lab>Data (hex, 0-8 bytes)</span>
+          <input id=data type=text placeholder="01 FF 2A">
+        </div>
+      </div>
+      <div class=sendrow>
+        <button class="btn btn-primary" onclick="tx()">Send</button>
+        <span id=msg></span>
+      </div>
+    </div>
+  </div>
+
+  <div class=card>
+    <div class=montop>
+      <span class=t>Bus Monitor &mdash; all IDs</span>
+      <button class="btn btn-ghost" onclick="clr()">Clear</button>
+    </div>
+    <table>
+      <thead><tr><th>ID</th><th>Type</th><th>DLC</th><th>Data</th><th style="text-align:right">Count</th></tr></thead>
+      <tbody id=rx><tr><td colspan=5 class=empty>Waiting for frames&hellip;</td></tr></tbody>
+    </table>
+  </div>
+</div>
+<footer>AP: CAN-Tool &middot; 192.168.4.1 &middot; CANH = yellow (DB9 pin 7), CANL = green (DB9 pin 2)</footer>
+
+<script>
+function $(i){return document.getElementById(i)}
+function form(b){return {method:'POST',headers:{'Content-Type':'application/x-www-form-urlencoded'},body:b}}
+function flash(t){var m=$('msg');m.textContent=t;m.className=/fail|not/i.test(t)?'err':'ok';}
+function tx(){
+  var ext=document.querySelector('input[name=ft]:checked').value==='ext';
+  var b='id='+encodeURIComponent($('id').value)+'&ext='+(ext?'1':'0')+'&data='+encodeURIComponent($('data').value);
+  fetch('/tx',form(b)).then(function(r){return r.text()}).then(flash);
+}
+function setBaud(){fetch('/baud',form('k='+$('baud').value)).then(function(r){return r.text()}).then(flash);}
+function clr(){fetch('/clear',{method:'POST'}).then(function(r){return r.text()}).then(flash);}
+function poll(){
+  fetch('/rx',{cache:'no-store'}).then(function(r){return r.json()}).then(function(d){
+    $('stat').textContent=d.baud+' kbit  |  '+d.total+' frames  |  '+d.frames.length+' IDs';
+    var f=d.frames.slice().sort(function(a,b){return a.id<b.id?-1:1});
+    if(!f.length){$('rx').innerHTML='<tr><td colspan=5 class=empty>Waiting for frames...</td></tr>';return;}
+    var h='';
+    for(var i=0;i<f.length;i++){var x=f[i];
+      h+='<tr><td class=idc>0x'+x.id+'</td>'
+       + '<td><span class="badge '+(x.ext?'ext':'std')+'">'+(x.ext?'Ext':'Std')+'</span></td>'
+       + '<td>'+x.dlc+'</td><td>'+(x.data||'')+'</td><td class=cnt>'+x.n+'</td></tr>';
+    }
+    $('rx').innerHTML=h;
+  }).catch(function(){}).finally(function(){setTimeout(poll,300)});
+}
+poll();
+</script>
+</body></html>
