@@ -84,4 +84,4 @@ CAN drives real actuators. Sending arbitrary frames onto a live vehicle or machi
 
 ## License
 
-MIT — do whatever, no warranty.
+GPL 3.0
